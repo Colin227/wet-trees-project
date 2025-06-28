@@ -14,6 +14,8 @@ import { DashboardService } from './dashboard/dashboard.service';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { EnvironmentReadingsModule } from './environment-readings/environment-readings.module';
 import { DevicesModule } from './devices/devices.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -42,7 +44,9 @@ import { DevicesModule } from './devices/devices.module';
     TreeHealthLogsModule,
     DashboardModule,
     EnvironmentReadingsModule,
-    DevicesModule
+    DevicesModule,
+    AuthModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
