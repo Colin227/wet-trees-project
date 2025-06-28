@@ -1,3 +1,5 @@
+import { Device } from 'src/devices/entities/device.entity';
+import { EnvironmentReading } from 'src/environment-readings/entities/environment-reading.entity';
 import { Site } from 'src/sites/entities/site.entity';
 import { Tree } from 'src/trees/entities/tree.entity';
 import { WateringEvent } from 'src/watering-events/entities/watering-event.entity';
@@ -20,5 +22,11 @@ export class Zone {
 
     @OneToMany(() => WateringEvent, event => event.zone)
     wateringEvents: WateringEvent[];
+
+    @OneToMany(() => EnvironmentReading, (reading) => reading.zone)
+    environmentReadings: EnvironmentReading[];
+
+    @OneToMany(() => Device, (device) => device.zone)
+    devices: Device[];
 
 }

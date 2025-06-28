@@ -7,12 +7,20 @@ import { WateringEventsModule } from './watering-events/watering-events.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ZonesModule } from './zones/zones.module';
+import { TreeHealthLogsModule } from './tree-health-logs/tree-health-logs.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { DashboardController } from './dashboard/dashboard.controller';
+import { DashboardService } from './dashboard/dashboard.service';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { EnvironmentReadingsModule } from './environment-readings/environment-readings.module';
+import { DevicesModule } from './devices/devices.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // makes config available everywhere without importing again
     }),
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -30,7 +38,11 @@ import { ZonesModule } from './zones/zones.module';
     SitesModule,
     TreesModule,
     WateringEventsModule,
-    ZonesModule
+    ZonesModule,
+    TreeHealthLogsModule,
+    DashboardModule,
+    EnvironmentReadingsModule,
+    DevicesModule
   ],
   controllers: [AppController],
   providers: [AppService],

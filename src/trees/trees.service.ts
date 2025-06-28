@@ -9,6 +9,7 @@ import { Zone } from 'src/zones/entities/zone.entity';
 
 @Injectable()
 export class TreesService {
+
   constructor(
     @InjectRepository(Tree)
     private treeRepository: Repository<Tree>,
@@ -37,7 +38,7 @@ export class TreesService {
   async findOne(id: number) {
     const tree = await this.treeRepository.findOne({
       where: { id },
-      relations: ['zone'],
+      relations: ['zone',],
     });
     if (!tree) {
       throw new Error(`Tree with ID ${id} not found`);
@@ -54,5 +55,30 @@ export class TreesService {
   async remove(id: number): Promise<void> {
     const tree = await this.findOne(id)
     await this.treeRepository.remove(tree);
+  }
+
+  async updateTreeStatuses(): Promise<void> {
+      const trees = await this.treeRepository
+      .createQueryBuilder('tree')
+      .leftJoinAndSelect('tree.zone', 'zone')
+      .getMany();
+
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - 30);
+
+      for (const tree of trees) {
+    const lastWatering = tree.zone.wateringEvents
+      ?.map((ev) => ev.wateredAt)
+      .sort((a, b) => b.getTime() - a.getTime())[0];
+
+    if (!lastWatering || lastWatering < cutoff) {
+      tree.status = 'needs_attention';
+      await this.treeRepository.save(tree);
+    } else {
+      tree.status = 'healthy';
+      await this.treeRepository.save(tree);
+    }
+  }
+
   }
 }
