@@ -6,10 +6,6 @@ export class CreateZoneDto {
     name: string;
 
     @IsNotEmpty()
-    @IsString()
-    location: string;
-
-    @IsNotEmpty()
     @IsInt()
     siteId: number;
 }
