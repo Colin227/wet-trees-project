@@ -15,7 +15,7 @@ export class EnvironmentReading {
     @Column('float', { nullable: true })
     humidity: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamptz' })
     recordedAt: Date;
 
     @ManyToOne(() => Zone, (zone) => zone.environmentReadings, {
