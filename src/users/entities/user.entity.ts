@@ -11,6 +11,12 @@ export class User {
     @Column()
     passwordHash: string;
 
+    @Column()
+    firstName: string;
+
+    @Column()
+    lastName: string;
+
     @Column({ default: 'user' })
     role: 'user' | 'admin';
 
@@ -19,4 +25,8 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    getFullName(): string {
+        return `${this.firstName} ${this.lastName}`;
+    }
 }

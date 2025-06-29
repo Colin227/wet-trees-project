@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { SafeUserDto } from './dto/safe-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -16,9 +17,13 @@ export class UsersController {
         return req.user; // Populated by JwtStrategy.validate()
     }
     @Post()
-    async register(@Body() createUserDto: CreateUserDto): Promise<Omit<User, 'passwordHash'>> {
+    async register(@Body() createUserDto: CreateUserDto): Promise<SafeUserDto> {
         const user = await this.usersService.create(createUserDto);
-        const { passwordHash, ...safeUser } = user;
-        return safeUser;
+        return {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName
+        }
     }
 }
