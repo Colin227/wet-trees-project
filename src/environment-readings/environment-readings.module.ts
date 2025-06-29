@@ -5,12 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Zone } from 'src/zones/entities/zone.entity';
 import { EnvironmentReading } from './entities/environment-reading.entity';
 import { Device } from 'src/devices/entities/device.entity';
+import { EnvironmentReadingsGateway } from './environment-readings.gateway';
 
 @Module({
   imports: [
       TypeOrmModule.forFeature([EnvironmentReading, Zone, Device])
     ],
   controllers: [EnvironmentReadingsController],
-  providers: [EnvironmentReadingsService],
+  providers: [EnvironmentReadingsService, EnvironmentReadingsGateway],
 })
 export class EnvironmentReadingsModule {}

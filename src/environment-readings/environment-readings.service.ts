@@ -6,6 +6,7 @@ import { EnvironmentReading } from './entities/environment-reading.entity';
 import { Repository } from 'typeorm';
 import { Zone } from 'src/zones/entities/zone.entity';
 import { Device } from 'src/devices/entities/device.entity';
+import { EnvironmentReadingsGateway } from './environment-readings.gateway';
 
 @Injectable()
 export class EnvironmentReadingsService {
@@ -17,7 +18,10 @@ export class EnvironmentReadingsService {
     private zoneRepository: Repository<Zone>,
 
     @InjectRepository(Device)
-    private deviceRepository: Repository<Device>
+    private deviceRepository: Repository<Device>,
+
+    
+    private gateway: EnvironmentReadingsGateway,
   ) {}
 
   async create(dto: CreateEnvironmentReadingDto): Promise<EnvironmentReading> {
@@ -25,7 +29,7 @@ export class EnvironmentReadingsService {
     const device = await this.deviceRepository.findOneBy({ deviceId: dto.deviceId })
     if (!device) throw new NotFoundException('Device not registered');
 
-
+    
     const reading = this.readingRepository.create({
       zone: device.zone,
       moisture: dto.moisture,
@@ -33,7 +37,9 @@ export class EnvironmentReadingsService {
       humidity: dto.humidity
     });
 
-    return this.readingRepository.save(reading);
+    const saved = await this.readingRepository.save(reading);
+    this.gateway.sendNewReading(saved);
+    return saved;
   }
 
   async findAll(): Promise<EnvironmentReading[]> {
