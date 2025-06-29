@@ -52,8 +52,8 @@ export class EnvironmentReadingsService {
 
     return this.readingRepository.find({
       where: { zone: { id: device.zone.id } },
-      order: { recordedAt: 'DESC' },
-      take: 100, // Can limit this however I want
+      order: { recordedAt: 'ASC' },
+      take: 100, // Can limit this however we want
     })
   }
 
