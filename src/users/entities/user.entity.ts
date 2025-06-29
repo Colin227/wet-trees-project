@@ -11,10 +11,10 @@ export class User {
     @Column()
     passwordHash: string;
 
-    @Column()
+    @Column({ default: 'First' })
     firstName: string;
 
-    @Column()
+    @Column({ default: 'Last' })
     lastName: string;
 
     @Column({ default: 'user' })

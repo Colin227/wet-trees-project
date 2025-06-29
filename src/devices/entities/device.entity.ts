@@ -11,4 +11,8 @@ export class Device {
 
     @ManyToOne(() => Zone, (zone) => zone.devices, { eager: true })
     zone: Zone;
+
+    @Column('jsonb', { default: {} })
+    config: Record<string, any>;
+
 }

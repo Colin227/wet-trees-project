@@ -2,10 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { DevicesService } from './devices.service';
 import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
+import { UpdateDeviceConfigDto } from './dto/update-device-config.dto';
 
 @Controller('devices')
 export class DevicesController {
-  constructor(private readonly devicesService: DevicesService) {}
+  constructor(private readonly devicesService: DevicesService) { }
 
   @Post()
   create(@Body() createDeviceDto: CreateDeviceDto) {
@@ -25,6 +26,16 @@ export class DevicesController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDeviceDto: UpdateDeviceDto) {
     return this.devicesService.update(+id, updateDeviceDto);
+  }
+
+  @Get(":id/config")
+  getConfig(@Param('id') id: string) {
+    return this.devicesService.getConfig(id);
+  }
+
+  @Patch(":id/config")
+  updateConfig(@Param('id') id: string, @Body() dto: UpdateDeviceConfigDto) {
+    return this.devicesService.updateConfig(id, dto);
   }
 
   @Delete(':id')
